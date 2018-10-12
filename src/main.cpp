@@ -7,9 +7,68 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
+#define GLM_ENABLE_EXPERIMENTAL
 #include <glm/glm.hpp>
+#include <glm/gtx/string_cast.hpp>
 
 #include "shader.hpp"
+#include "camera.hpp"
+
+float deltaTime = 0.0f;
+float lastFrame = 0.0f;
+
+Camera camera(glm::vec3(0.0f, 0.0f, 1.0f));
+float lastX = 640 / 2.0f;
+float lastY = 420 / 2.0f;
+bool isMousePressed = false;
+
+void processInput(GLFWwindow *window)
+{
+    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+        glfwSetWindowShouldClose(window, true);
+
+    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+        camera.processKeyboard(FORWARD, deltaTime);
+    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+        camera.processKeyboard(BACKWARD, deltaTime);
+    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+        camera.processKeyboard(LEFT, deltaTime);
+    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+        camera.processKeyboard(RIGHT, deltaTime);
+}
+
+void mouseMoveCallback(GLFWwindow* window, double xpos, double ypos)
+{
+    if (isMousePressed == false)
+        return;
+
+    float xoffset = xpos - lastX;
+    float yoffset = lastY - ypos; // reversed since y-coordinates go from bottom to top
+
+    lastX = xpos;
+    lastY = ypos;
+
+    camera.processMouseMovement(xoffset, yoffset);
+}
+
+void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
+{
+    if (action == GLFW_PRESS) {
+        double xpos, ypos;
+
+        isMousePressed = true;
+        glfwGetCursorPos(window, &xpos, &ypos);
+        lastX = (float)xpos;
+        lastY = (float)ypos;
+    } else {
+        isMousePressed = false;
+    }
+}
+
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
+{
+    camera.processMouseScroll(yoffset);
+}
 
 int main(void)
 {
@@ -30,6 +89,9 @@ int main(void)
         return -1;
     }
     glfwMakeContextCurrent(window);
+    glfwSetCursorPosCallback(window, mouseMoveCallback);
+    glfwSetMouseButtonCallback(window, mouseButtonCallback);
+    glfwSetScrollCallback(window, scroll_callback);
 
     glewExperimental = true; // Needed for core profile
     if (glewInit() != GLEW_OK) {
@@ -41,6 +103,7 @@ int main(void)
 
     glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
 
+    // load lidar points
     std::vector<glm::vec3> verts;
 
     std::ifstream infile("0000000000.txt");
@@ -54,14 +117,12 @@ int main(void)
             break;
         }
 
-        point /= 100.0;
+        point /= 1.0;
         verts.push_back(point);
     }
     for (auto &p : verts) {
         // std::cout << p.x << " " << p.y << " " << p.z << std::endl;
     }
-
-    Shader shader("vshader.vsh", "fshader.fsh");
 
     float vertices[] = {
         0.5f,  0.5f, 0.0f,  // top right
@@ -93,19 +154,38 @@ int main(void)
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
 
+    Shader shader("vshader.vsh", "fshader.fsh");
+
     do {
+        float currentFrame = glfwGetTime();
+        deltaTime = currentFrame - lastFrame;
+        lastFrame = currentFrame;
+
+        processInput(window);
+
         glClearColor(0.5f, 0.5f, 0.5f, 0.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
         shader.use();
+        glm::mat4 projection = glm::perspective(glm::radians(camera.zoom),
+                                                640.0f / 420.0f,
+                                                0.1f, 100.0f);
+        shader.setMat4("projection", projection);
+
+        glm::mat4 view = camera.getViewMatrix();
+        shader.setMat4("view", view);
+        // std::cout << glm::to_string(view) << std::endl;
+
+        glm::mat4 model(1.0);
+        shader.setMat4("model", model);
+
         glBindVertexArray(vao);
         // glDrawElements(GL_POINTS, 6, GL_UNSIGNED_INT, 0);
         glDrawArrays(GL_POINTS, 0, verts.size());
 
         glfwSwapBuffers(window);
         glfwPollEvents();
-    } while (glfwGetKey(window, GLFW_KEY_ESCAPE) != GLFW_PRESS &&
-             glfwWindowShouldClose(window) == 0);
+    } while (!glfwWindowShouldClose(window));
 
     glfwTerminate();
 
