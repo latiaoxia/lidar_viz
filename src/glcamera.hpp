@@ -1,5 +1,5 @@
-#ifndef CAMERA_H
-#define CAMERA_H
+#ifndef GLCAMERA_HPP
+#define GLCAMERA_HPP
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -23,7 +23,7 @@ const float ZOOM        =  45.0f;
 
 
 // An abstract camera class that processes input and calculates the corresponding Euler Angles, Vectors and Matrices for use in OpenGL
-class Camera {
+class GlCamera {
 public:
     // Camera Attributes
     glm::vec3 position;
@@ -40,11 +40,11 @@ public:
     float zoom;
 
     // Constructor with vectors
-    Camera(glm::vec3 _position = glm::vec3(0.0f, 0.0f, 0.0f),
+    GlCamera(glm::vec3 _position = glm::vec3(0.0f, 0.0f, 0.0f),
            glm::vec3 _up = glm::vec3(0.0f, 0.0f, 1.0f),
            float _roll = ROLL, float pitch = PITCH);
     // Constructor with scalar values
-    Camera(float posX, float posY, float posZ,
+    GlCamera(float posX, float posY, float posZ,
            float upX, float upY, float upZ,
            float roll, float pitch);
 

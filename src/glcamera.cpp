@@ -1,8 +1,8 @@
-#include "camera.hpp"
+#include "glcamera.hpp"
 
 #include <iostream>
 
-Camera::Camera(glm::vec3 _position, glm::vec3 _up, float _roll, float _pitch) :
+GlCamera::GlCamera(glm::vec3 _position, glm::vec3 _up, float _roll, float _pitch) :
     front(glm::vec3(0.0f, 0.0174524f, -0.999848f)),
     moveSpeed(SPEED),
     mouseSensitivity(SENSITIVITY),
@@ -15,7 +15,7 @@ Camera::Camera(glm::vec3 _position, glm::vec3 _up, float _roll, float _pitch) :
     updateCameraVectors();
 }
 
-Camera::Camera(float posX, float posY, float posZ,
+GlCamera::GlCamera(float posX, float posY, float posZ,
                float upX, float upY, float upZ,
                float _roll, float _pitch) :
     front(glm::vec3(0.0f, 0.0174524f, -0.999848f)),
@@ -30,7 +30,7 @@ Camera::Camera(float posX, float posY, float posZ,
     updateCameraVectors();
 }
 
-void Camera::processKeyboard(Camera_Movement direction, float deltaTime)
+void GlCamera::processKeyboard(Camera_Movement direction, float deltaTime)
 {
     float velocity = moveSpeed * deltaTime;
     switch (direction) {
@@ -51,7 +51,7 @@ void Camera::processKeyboard(Camera_Movement direction, float deltaTime)
     }
 }
 
-void Camera::processMouseMovement(float xoffset, float yoffset,
+void GlCamera::processMouseMovement(float xoffset, float yoffset,
                                   bool constrainpitch)
 {
     xoffset *= mouseSensitivity;
@@ -73,7 +73,7 @@ void Camera::processMouseMovement(float xoffset, float yoffset,
     updateCameraVectors();
 }
 
-void Camera::processMouseScroll(float yoffset)
+void GlCamera::processMouseScroll(float yoffset)
 {
     if (zoom >= 1.0f && zoom <= 45.0f)
         zoom -= yoffset;
@@ -83,7 +83,7 @@ void Camera::processMouseScroll(float yoffset)
         zoom = 45.0f;
 }
 
-void Camera::updateCameraVectors()
+void GlCamera::updateCameraVectors()
 {
     glm::vec3 _front;
     _front.x = sin(glm::radians(roll)) * cos(glm::radians(pitch));

@@ -11,8 +11,9 @@
 #include <glm/glm.hpp>
 #include <glm/gtx/string_cast.hpp>
 
+#include <asio.hpp>
 #include "shader.hpp"
-#include "camera.hpp"
+#include "glcamera.hpp"
 
 float deltaTime = 0.0f;
 float lastFrame = 0.0f;
@@ -68,6 +69,17 @@ void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
     camera.processMouseScroll(yoffset);
+}
+
+int glInit()
+{
+    if (!glfwInit()) {
+        std::cerr << "Failed to initialize GLFW" << std::endl;
+        getchar();
+        return -1;
+    }
+
+    return 0;
 }
 
 int main(void)
@@ -163,7 +175,7 @@ int main(void)
 
         processInput(window);
 
-        glClearColor(0.5f, 0.5f, 0.5f, 0.0f);
+        glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
         shader.use();
@@ -184,7 +196,8 @@ int main(void)
         glDrawArrays(GL_POINTS, 0, verts.size());
 
         glfwSwapBuffers(window);
-        glfwPollEvents();
+        // glfwPollEvents();
+        glfwWaitEventsTimeout(0.03);
     } while (!glfwWindowShouldClose(window));
 
     glfwTerminate();

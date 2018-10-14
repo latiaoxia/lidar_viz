@@ -10,5 +10,6 @@ target_link_libraries(${PROJECT_NAME}
     ${OPENGL_LIBRARY}
     glfw
     GLEW
+    pthread
 )
 
