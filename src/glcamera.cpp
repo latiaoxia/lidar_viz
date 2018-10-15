@@ -52,7 +52,7 @@ void GlCamera::processKeyboard(Camera_Movement direction, float deltaTime)
 }
 
 void GlCamera::processMouseMovement(float xoffset, float yoffset,
-                                  bool constrainpitch)
+                                    bool constrainpitch)
 {
     xoffset *= mouseSensitivity;
     yoffset *= mouseSensitivity;

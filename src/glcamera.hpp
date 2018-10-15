@@ -6,14 +6,6 @@
 
 #include <vector>
 
-// Defines several possible options for camera movement. Used as abstraction to stay away from window-system specific input methods
-enum Camera_Movement {
-    FORWARD,
-    BACKWARD,
-    LEFT,
-    RIGHT
-};
-
 // Default camera values
 const float ROLL         = 0.0f;
 const float PITCH       =  -89.0f;
@@ -25,6 +17,14 @@ const float ZOOM        =  45.0f;
 // An abstract camera class that processes input and calculates the corresponding Euler Angles, Vectors and Matrices for use in OpenGL
 class GlCamera {
 public:
+    // Defines several possible options for camera movement. Used as abstraction to stay away from window-system specific input methods
+    enum Camera_Movement {
+        FORWARD,
+        BACKWARD,
+        LEFT,
+        RIGHT
+    };
+
     // Camera Attributes
     glm::vec3 position;
     glm::vec3 front;
