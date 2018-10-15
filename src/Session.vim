@@ -7,9 +7,9 @@ if expand('%') == '' && !&modified && line('$') <= 1 && getline(1) == ''
   let s:wipebuf = bufnr('%')
 endif
 set shortmess=aoO
-badd +17 main.cpp
+badd +26 main.cpp
 badd +33 glrender.cpp
-badd +10032 term://.//53019:/bin/bash
+badd +10032 term://.//56651:/bin/bash
 badd +1 ~/project/lidar_viz/compile_commands.json
 badd +13 CMakeLists.txt
 badd +31 glrender.hpp
@@ -46,7 +46,7 @@ exe 'vert 3resize ' . ((&columns * 135 + 135) / 271)
 exe '4resize ' . ((&lines * 32 + 34) / 68)
 exe 'vert 4resize ' . ((&columns * 135 + 135) / 271)
 argglobal
-if bufexists('term://.//53019:/bin/bash') | buffer term://.//53019:/bin/bash | else | edit term://.//53019:/bin/bash | endif
+if bufexists('term://.//56651:/bin/bash') | buffer term://.//56651:/bin/bash | else | edit term://.//56651:/bin/bash | endif
 setlocal fdm=manual
 setlocal fde=0
 setlocal fmr={{{,}}}
@@ -55,12 +55,12 @@ setlocal fdl=0
 setlocal fml=1
 setlocal fdn=20
 setlocal fen
-let s:l = 10029 - ((28 * winheight(0) + 16) / 32)
+let s:l = 392 - ((31 * winheight(0) + 16) / 32)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-10029
-normal! 0
+392
+normal! 056|
 wincmd w
 argglobal
 setlocal fdm=manual
@@ -72,12 +72,12 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-let s:l = 1 - ((0 * winheight(0) + 16) / 32)
+let s:l = 24 - ((14 * winheight(0) + 16) / 32)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-1
-normal! 0
+24
+normal! 033|
 wincmd w
 argglobal
 if bufexists('glrender.hpp') | buffer glrender.hpp | else | edit glrender.hpp | endif
@@ -90,12 +90,12 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-let s:l = 32 - ((16 * winheight(0) + 16) / 32)
+let s:l = 60 - ((29 * winheight(0) + 16) / 32)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-32
-normal! 0
+60
+normal! 021|
 wincmd w
 argglobal
 if bufexists('glrender.cpp') | buffer glrender.cpp | else | edit glrender.cpp | endif
@@ -108,13 +108,14 @@ setlocal fml=1
 setlocal fdn=20
 setlocal fen
 silent! normal! zE
-let s:l = 225 - ((23 * winheight(0) + 16) / 32)
+let s:l = 78 - ((21 * winheight(0) + 16) / 32)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-225
-normal! 019|
+78
+normal! 02|
 wincmd w
+4wincmd w
 exe '1resize ' . ((&lines * 32 + 34) / 68)
 exe 'vert 1resize ' . ((&columns * 135 + 135) / 271)
 exe '2resize ' . ((&lines * 32 + 34) / 68)
