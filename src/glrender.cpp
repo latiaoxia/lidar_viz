@@ -69,6 +69,12 @@ int GlRender::init()
     };
     glfwSetScrollCallback(window, scrollFunc);
 
+    auto closeFunc = [](GLFWwindow *w)
+    {
+        static_cast<GlRender*>(glfwGetWindowUserPointer(w))
+            ->setStop(true);
+    };
+    glfwSetWindowCloseCallback(window, closeFunc);
     // auto keyFunc = [](GLFWwindow *w, int k, int s, int a, int m)
     // {
         // static_cast<GlRender*>(glfwGetWindowUserPointer(w))

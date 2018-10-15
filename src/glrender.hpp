@@ -20,6 +20,7 @@ public:
     virtual void resize();
 
     bool shouldStop();
+    void setStop(bool);
 
 private:
     void mouseButtonCallback(GLFWwindow* window, int button,
@@ -51,6 +52,11 @@ private:
 
 inline bool GlRender::shouldStop()
 {
-        return m_shouldStop;
+    return m_shouldStop;
+}
+
+inline void GlRender::setStop(bool s)
+{
+    m_shouldStop = s;
 }
 #endif
